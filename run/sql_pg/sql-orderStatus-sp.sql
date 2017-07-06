@@ -1,0 +1,113 @@
+DROP FUNCTION if exists orderStatusTransaction(integer,integer,integer,varchar,boolean);
+
+CREATE OR REPLACE FUNCTION orderStatusTransaction (
+    IN v_W_ID		INTEGER,
+    IN v_D_ID		INTEGER,
+    IN v_C_ID		INTEGER,
+    IN v_C_LAST		VARCHAR,
+    IN v_BY_NAME    BOOLEAN,
+    OUT ov_C_ID   INTEGER,
+    OUT ov_C_FIRST VARCHAR,
+    OUT ov_C_LAST VARCHAR,
+    OUT ov_C_MIDDLE VARCHAR,
+    OUT ov_C_BALANCE NUMERIC,
+    OUT ov_O_ID INTEGER,
+    OUT ov_OL_I_ID INTEGER, 
+    OUT ov_OL_SUPPLY_W_ID INTEGER, 
+    OUT ov_OL_QUANTITY INTEGER,
+    OUT ov_O_CARRIER_ID INTEGER,
+    OUT ov_OL_AMOUNT NUMERIC,
+    OUT ov_OL_DELIVERY_D VARCHAR, 
+    OUT ov_O_ENTRY_D VARCHAR)
+AS $$
+DECLARE 
+	N INTEGER;
+    NAMECNT INTEGER;
+    C_BYNAME refcursor;
+    O_LINE refcursor;
+BEGIN
+    ov_C_ID := v_C_ID;
+    IF ov_C_ID = 0 THEN
+	
+		--WHENEVER NOT FOUND GOTO NO_CUSTOMER;
+
+		SELECT COUNT (1)
+		INTO NAMECNT
+		FROM CUSTOMER
+		WHERE
+		    	C_LAST = v_C_LAST
+		    AND C_D_ID = v_D_ID
+		    AND C_W_ID = v_W_ID;
+
+		OPEN C_BYNAME FOR
+		SELECT
+		    C_BALANCE, C_LAST, C_MIDDLE, C_ID
+		FROM CUSTOMER
+		WHERE
+			C_W_ID = _W_ID
+		    AND C_D_ID = _D_ID
+		    AND C_LAST = _C_LAST
+		ORDER BY
+		    C_W_ID, C_D_ID, C_LAST, C_FIRST;
+
+		--OPEN C_BYNAME;
+
+		N := 0;
+		LOOP
+			IF (N > NAMECNT / 2) THEN
+			    EXIT;
+			END IF;    
+			FETCH C_BYNAME INTO ov_C_BALANCE, ov_C_FIRST, ov_C_MIDDLE, ov_C_ID;
+			N := N + 1;
+		END LOOP;
+
+		CLOSE C_BYNAME;
+    ELSE
+		SELECT
+		    C_BALANCE, C_FIRST, C_MIDDLE, C_LAST
+		INTO
+		    ov_C_BALANCE, ov_C_FIRST, ov_C_MIDDLE, ov_C_LAST
+		FROM
+		    CUSTOMER
+		WHERE
+			C_W_ID = v_W_ID
+		    AND C_D_ID = v_D_ID
+		    AND C_ID = ov_C_ID;
+    END IF;
+
+    --WHENEVER NOT FOUND GOTO NO_ORDER;
+    SELECT
+	O_ID, O_CARRIER_ID, O_ENTRY_D
+    INTO
+	ov_O_ID, ov_O_CARRIER_ID, ov_O_ENTRY_D
+    FROM
+	OORDER
+    WHERE
+	    O_W_ID = v_W_ID
+	AND O_D_ID = v_D_ID
+	AND O_C_ID = ov_C_ID
+    ORDER BY
+	O_W_ID DESC, O_D_ID DESC, O_C_ID DESC, O_ID DESC;
+
+    OPEN O_LINE FOR
+    SELECT
+	OL_I_ID, OL_SUPPLY_W_ID, OL_QUANTITY, OL_AMOUNT, OL_DELIVERY_D
+    FROM
+	ORDER_LINE
+    WHERE
+	    OL_W_ID = v_W_ID
+	AND OL_D_ID = v_D_ID
+	AND OL_O_ID = ov_O_ID;
+
+    --WHENEVER NOT FOUND GOTO LINES_DONE;
+
+    --OPEN O_LINE;
+    
+    --WHILE (1 = 1) {
+	FETCH O_LINE INTO
+	    ov_OL_I_ID, ov_OL_SUPPLY_W_ID, ov_OL_QUANTITY, ov_OL_AMOUNT,
+	    ov_OL_DELIVERY_D;	
+    --}
+    CLOSE O_LINE;
+END;
+$$ LANGUAGE plpgsql;

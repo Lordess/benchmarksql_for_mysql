@@ -1,0 +1,33 @@
+DROP FUNCTION if exists stockLevelTransaction(integer,integer,integer);
+
+CREATE OR REPLACE FUNCTION stockLevelTransaction (
+    IN v_W_ID		INTEGER,
+    IN v_D_ID		INTEGER,
+    IN v_THRESHOLD	INTEGER,
+    OUT o_N_ITEMS   INTEGER) 
+AS $$
+DECLARE 
+    LAST_O INTEGER;
+
+BEGIN
+    SELECT D_NEXT_O_ID INTO LAST_O
+    FROM DISTRICT
+    WHERE
+	    D_W_ID = v_W_ID
+	AND D_ID = v_D_ID;
+
+
+    SELECT COUNT (DISTINCT S_I_ID)
+    INTO o_N_ITEMS
+    FROM ORDER_LINE, STOCK
+    WHERE
+	    OL_W_ID = v_W_ID
+	AND OL_D_ID = v_D_ID
+	AND OL_O_ID < LAST_O
+	AND OL_O_ID >= LAST_O - 20
+	AND S_W_ID = v_W_ID
+	AND S_I_ID = OL_I_ID AND S_QUANTITY < v_THRESHOLD;
+
+    --RETURN (o_N_ITEMS);
+END;
+$$ LANGUAGE plpgsql;

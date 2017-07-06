@@ -1,0 +1,29 @@
+driver=com.mysql.jdbc.Driver
+conn=jdbc:mysql://122.25.221.148:1234/benchmarksql?rewriteBatchedStatements=false
+//conn=jdbc:mysql://122.24.77.27:2323/benchmarksql?rewriteBatchedStatements=false
+user=root
+password=db10$ZTE
+//loadidbegin=1
+//loadidend=500
+//warehouseidbegin=1
+//warehouseidend=1250
+
+//warehouseidbegin=1
+//warehouseidend=500
+
+
+warehouses=1250
+terminals=256
+runTxnsPerTerminal=0
+//To run for specified minutes- runTxnsPerTerminal must equal zero
+runMins=2
+//Number of total transactions per minute
+limitTxnsPerMin=1000000
+
+//The following five values must add up to 100
+newOrderWeight=45
+paymentWeight=43
+orderStatusWeight=4
+deliveryWeight=4
+stockLevelWeight=4
+

@@ -1,0 +1,90 @@
+
+alter table benchmarksql.warehouse add constraint pk_warehouse 
+  primary key (w_id);
+
+alter table benchmarksql.district add constraint pk_district 
+  primary key (d_w_id, d_id);
+
+alter table benchmarksql.customer add constraint pk_customer 
+  primary key (c_w_id, c_d_id, c_id);
+
+create index ndx_customer_name 
+  on  benchmarksql.customer (c_w_id, c_d_id, c_last, c_first);
+
+select setval('hist_id_seq', (select max(hist_id) + 1 from benchmarksql.history), false);
+
+alter table benchmarksql.oorder add constraint pk_oorder 
+  primary key (o_w_id, o_d_id, o_id);
+
+create unique index ndx_oorder_carrier 
+  on  benchmarksql.oorder (o_w_id, o_d_id, o_carrier_id, o_id);
+ 
+alter table benchmarksql.new_order add constraint pk_new_order 
+  primary key (no_w_id, no_d_id, no_o_id);
+
+
+
+alter table benchmarksql.stock add constraint pk_stock
+  primary key (s_w_id, s_i_id);
+
+alter table benchmarksql.item add constraint pk_item
+  primary key (i_id);
+
+alter table benchmarksql.order_line add constraint pk_order_line 
+  primary key (ol_w_id, ol_d_id, ol_o_id, ol_number);
+  
+ALTER TABLE benchmarksql.order_line_1_100	 ADD CONSTRAINT pk_order_line_1_100	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_101_200	 ADD CONSTRAINT pk_order_line_101_200	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_201_300	 ADD CONSTRAINT pk_order_line_201_300	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_301_400	 ADD CONSTRAINT pk_order_line_301_400	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_401_500	 ADD CONSTRAINT pk_order_line_401_500	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_501_600	 ADD CONSTRAINT pk_order_line_501_600	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_601_700	 ADD CONSTRAINT pk_order_line_601_700	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_701_800	 ADD CONSTRAINT pk_order_line_701_800	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_801_900	 ADD CONSTRAINT pk_order_line_801_900	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_901_1000	 ADD CONSTRAINT pk_order_line_901_1000	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_1001_1100	 ADD CONSTRAINT pk_order_line_1001_1100	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_1101_1200	 ADD CONSTRAINT pk_order_line_1101_1200	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_1201_1300	 ADD CONSTRAINT pk_order_line_1201_1300	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_1301_1400	 ADD CONSTRAINT pk_order_line_1301_1400	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_1401_1500	 ADD CONSTRAINT pk_order_line_1401_1500	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_1501_1600	 ADD CONSTRAINT pk_order_line_1501_1600	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_1601_1700	 ADD CONSTRAINT pk_order_line_1601_1700	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_1701_1800	 ADD CONSTRAINT pk_order_line_1701_1800	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_1801_1900	 ADD CONSTRAINT pk_order_line_1801_1900	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_1901_2000	 ADD CONSTRAINT pk_order_line_1901_2000	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_2001_2100	 ADD CONSTRAINT pk_order_line_2001_2100	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_2101_2200	 ADD CONSTRAINT pk_order_line_2101_2200	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_2201_2300	 ADD CONSTRAINT pk_order_line_2201_2300	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_2301_2400	 ADD CONSTRAINT pk_order_line_2301_2400	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_2401_2500	 ADD CONSTRAINT pk_order_line_2401_2500	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_2501_2600	 ADD CONSTRAINT pk_order_line_2501_2600	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_2601_2700	 ADD CONSTRAINT pk_order_line_2601_2700	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_2701_2800	 ADD CONSTRAINT pk_order_line_2701_2800	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_2801_2900	 ADD CONSTRAINT pk_order_line_2801_2900	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_2901_3000	 ADD CONSTRAINT pk_order_line_2901_3000	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_3001_3100	 ADD CONSTRAINT pk_order_line_3001_3100	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_3101_3200	 ADD CONSTRAINT pk_order_line_3101_3200	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_3201_3300	 ADD CONSTRAINT pk_order_line_3201_3300	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_3301_3400	 ADD CONSTRAINT pk_order_line_3301_3400	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_3401_3500	 ADD CONSTRAINT pk_order_line_3401_3500	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_3501_3600	 ADD CONSTRAINT pk_order_line_3501_3600	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_3601_3700	 ADD CONSTRAINT pk_order_line_3601_3700	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_3701_3800	 ADD CONSTRAINT pk_order_line_3701_3800	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_3801_3900	 ADD CONSTRAINT pk_order_line_3801_3900	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_3901_4000	 ADD CONSTRAINT pk_order_line_3901_4000	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_4001_4100	 ADD CONSTRAINT pk_order_line_4001_4100	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_4101_4200	 ADD CONSTRAINT pk_order_line_4101_4200	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_4201_4300	 ADD CONSTRAINT pk_order_line_4201_4300	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_4301_4400	 ADD CONSTRAINT pk_order_line_4301_4400	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_4401_4500	 ADD CONSTRAINT pk_order_line_4401_4500	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_4501_4600	 ADD CONSTRAINT pk_order_line_4501_4600	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_4601_4700	 ADD CONSTRAINT pk_order_line_4601_4700	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_4701_4800	 ADD CONSTRAINT pk_order_line_4701_4800	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_4801_4900	 ADD CONSTRAINT pk_order_line_4801_4900	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_4901_5000	 ADD CONSTRAINT pk_order_line_4901_5000	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+ALTER TABLE benchmarksql.order_line_5001_5100	 ADD CONSTRAINT pk_order_line_5001_5100	 PRIMARY KEY (ol_w_id, ol_d_id, ol_o_id, ol_number);
+
+
+
+vacuum analyze;

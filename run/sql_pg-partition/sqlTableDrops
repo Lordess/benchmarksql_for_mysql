@@ -1,0 +1,71 @@
+
+drop table benchmarksql.warehouse;
+
+drop table benchmarksql.item;
+
+drop table benchmarksql.stock;
+
+drop table benchmarksql.district;
+
+drop table benchmarksql.customer;
+
+drop table benchmarksql.oorder;
+
+drop table benchmarksql.history;
+
+drop table benchmarksql.new_order;
+
+drop table benchmarksql.order_line_1_100	 ;
+drop table benchmarksql.order_line_101_200	 ;
+drop table benchmarksql.order_line_201_300	 ;
+drop table benchmarksql.order_line_301_400	 ;
+drop table benchmarksql.order_line_401_500	 ;
+drop table benchmarksql.order_line_501_600	 ;
+drop table benchmarksql.order_line_601_700	 ;
+drop table benchmarksql.order_line_701_800	 ;
+drop table benchmarksql.order_line_801_900	 ;
+drop table benchmarksql.order_line_901_1000  ;
+drop table benchmarksql.order_line_1001_1100 ;
+drop table benchmarksql.order_line_1101_1200 ;
+drop table benchmarksql.order_line_1201_1300 ;
+drop table benchmarksql.order_line_1301_1400 ;
+drop table benchmarksql.order_line_1401_1500 ;
+drop table benchmarksql.order_line_1501_1600 ;
+drop table benchmarksql.order_line_1601_1700 ;
+drop table benchmarksql.order_line_1701_1800 ;
+drop table benchmarksql.order_line_1801_1900 ;
+drop table benchmarksql.order_line_1901_2000 ;
+drop table benchmarksql.order_line_2001_2100 ;
+drop table benchmarksql.order_line_2101_2200 ;
+drop table benchmarksql.order_line_2201_2300 ;
+drop table benchmarksql.order_line_2301_2400 ;
+drop table benchmarksql.order_line_2401_2500 ;
+drop table benchmarksql.order_line_2501_2600 ;
+drop table benchmarksql.order_line_2601_2700 ;
+drop table benchmarksql.order_line_2701_2800 ;
+drop table benchmarksql.order_line_2801_2900 ;
+drop table benchmarksql.order_line_2901_3000 ;
+drop table benchmarksql.order_line_3001_3100 ;
+drop table benchmarksql.order_line_3101_3200 ;
+drop table benchmarksql.order_line_3201_3300 ;
+drop table benchmarksql.order_line_3301_3400 ;
+drop table benchmarksql.order_line_3401_3500 ;
+drop table benchmarksql.order_line_3501_3600 ;
+drop table benchmarksql.order_line_3601_3700 ;
+drop table benchmarksql.order_line_3701_3800 ;
+drop table benchmarksql.order_line_3801_3900 ;
+drop table benchmarksql.order_line_3901_4000 ;
+drop table benchmarksql.order_line_4001_4100 ;
+drop table benchmarksql.order_line_4101_4200 ;
+drop table benchmarksql.order_line_4201_4300 ;
+drop table benchmarksql.order_line_4301_4400 ;
+drop table benchmarksql.order_line_4401_4500 ;
+drop table benchmarksql.order_line_4501_4600 ;
+drop table benchmarksql.order_line_4601_4700 ;
+drop table benchmarksql.order_line_4701_4800 ;
+drop table benchmarksql.order_line_4801_4900 ;
+drop table benchmarksql.order_line_4901_5000 ;
+drop table benchmarksql.order_line_5001_5100 ;
+
+--Since the dependency, the parent should be the last one.
+drop table benchmarksql.order_line;

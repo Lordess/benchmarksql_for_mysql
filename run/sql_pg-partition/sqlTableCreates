@@ -1,0 +1,325 @@
+DROP SCHEMA IF EXISTS benchmarksql CASCADE;
+
+CREATE SCHEMA benchmarksql;
+
+create table benchmarksql.warehouse (
+  w_id  integer   not null,
+  w_ytd decimal(12,2),
+  w_tax decimal(4,4),
+  w_name   varchar(10),
+  w_street_1  varchar(20),
+  w_street_2  varchar(20),
+  w_city   varchar(20),
+  w_state  char(2),
+  w_zip char(9)
+);
+
+create table benchmarksql.district (
+  d_w_id integer not null,
+  d_id   integer not null,
+  d_ytd  decimal(12,2),
+  d_tax  decimal(4,4),
+  d_next_o_id  integer,
+  d_name varchar(10),
+  d_street_1   varchar(20),
+  d_street_2   varchar(20),
+  d_city varchar(20),
+  d_state   char(2),
+  d_zip  char(9)
+);
+
+create table benchmarksql.customer (
+  c_w_id   integer  not null,
+  c_d_id   integer  not null,
+  c_id  integer  not null,
+  c_discount  decimal(4,4),
+  c_credit char(2),
+  c_last   varchar(16),
+  c_first  varchar(16),
+  c_credit_lim   decimal(12,2),
+  c_balance   decimal(12,2),
+  c_ytd_payment  float,
+  c_payment_cnt  integer,
+  c_delivery_cnt integer,
+  c_street_1  varchar(20),
+  c_street_2  varchar(20),
+  c_city   varchar(20),
+  c_state  char(2),
+  c_zip char(9),
+  c_phone  char(16),
+  c_since  timestamp,
+  c_middle char(2),
+  c_data   varchar(500)
+);
+
+create sequence hist_id_seq;
+
+create table benchmarksql.history (
+  hist_id  integer not null default nextval('hist_id_seq') primary key,
+  h_c_id   integer,
+  h_c_d_id integer,
+  h_c_w_id integer,
+  h_d_id   integer,
+  h_w_id   integer,
+  h_date   timestamp,
+  h_amount decimal(6,2),
+  h_data   varchar(24)
+);
+
+
+create table benchmarksql.oorder (
+  o_w_id integer   not null,
+  o_d_id integer   not null,
+  o_id   integer   not null,
+  o_c_id integer,
+  o_carrier_id integer,
+  o_ol_cnt  decimal(2,0),
+  o_all_local  decimal(1,0),
+  o_entry_d timestamp
+);
+
+
+create table benchmarksql.new_order (
+  no_w_id  integer   not null,
+  no_d_id  integer   not null,
+  no_o_id  integer   not null
+);
+
+
+create table benchmarksql.order_line (
+  ol_w_id   integer   not null,
+  ol_d_id   integer   not null,
+  ol_o_id   integer   not null,
+  ol_number integer   not null,
+  ol_i_id   integer   not null,
+  ol_delivery_d   timestamp,
+  ol_amount decimal(6,2),
+  ol_supply_w_id  integer,
+  ol_quantity  decimal(2,0),
+  ol_dist_info char(24)
+);
+
+
+create table benchmarksql.stock (
+  s_w_id integer not null,
+  s_i_id integer not null,
+  s_quantity   decimal(4,0),
+  s_ytd  decimal(8,2),
+  s_order_cnt  integer,
+  s_remote_cnt integer,
+  s_data varchar(50),
+  s_dist_01 char(24),
+  s_dist_02 char(24),
+  s_dist_03 char(24),
+  s_dist_04 char(24),
+  s_dist_05 char(24),
+  s_dist_06 char(24),
+  s_dist_07 char(24),
+  s_dist_08 char(24),
+  s_dist_09 char(24),
+  s_dist_10 char(24)
+);
+
+
+create table benchmarksql.item (
+  i_id  integer   not null,
+  i_name   varchar(24),
+  i_price  decimal(5,2),
+  i_data   varchar(50),
+  i_im_id  integer
+);
+
+
+
+CREATE TABLE benchmarksql.order_line_1_100 ( CHECK ( ol_w_id >= 	1	 AND ol_w_id < 	100	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_101_200	 ( CHECK ( ol_w_id >= 	101	 AND ol_w_id < 	200	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_201_300	 ( CHECK ( ol_w_id >= 	201	 AND ol_w_id < 	300	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_301_400	 ( CHECK ( ol_w_id >= 	301	 AND ol_w_id < 	400	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_401_500	 ( CHECK ( ol_w_id >= 	401	 AND ol_w_id < 	500	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_501_600	 ( CHECK ( ol_w_id >= 	501	 AND ol_w_id < 	600	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_601_700	 ( CHECK ( ol_w_id >= 	601	 AND ol_w_id < 	700	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_701_800	 ( CHECK ( ol_w_id >= 	701	 AND ol_w_id < 	800	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_801_900	 ( CHECK ( ol_w_id >= 	801	 AND ol_w_id < 	900	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_901_1000	 ( CHECK ( ol_w_id >= 	901	 AND ol_w_id < 	1000	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_1001_1100	 ( CHECK ( ol_w_id >= 	1001	 AND ol_w_id < 	1100	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_1101_1200	 ( CHECK ( ol_w_id >= 	1101	 AND ol_w_id < 	1200	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_1201_1300	 ( CHECK ( ol_w_id >= 	1201	 AND ol_w_id < 	1300	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_1301_1400	 ( CHECK ( ol_w_id >= 	1301	 AND ol_w_id < 	1400	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_1401_1500	 ( CHECK ( ol_w_id >= 	1401	 AND ol_w_id < 	1500	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_1501_1600	 ( CHECK ( ol_w_id >= 	1501	 AND ol_w_id < 	1600	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_1601_1700	 ( CHECK ( ol_w_id >= 	1601	 AND ol_w_id < 	1700	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_1701_1800	 ( CHECK ( ol_w_id >= 	1701	 AND ol_w_id < 	1800	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_1801_1900	 ( CHECK ( ol_w_id >= 	1801	 AND ol_w_id < 	1900	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_1901_2000	 ( CHECK ( ol_w_id >= 	1901	 AND ol_w_id < 	2000	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_2001_2100	 ( CHECK ( ol_w_id >= 	2001	 AND ol_w_id < 	2100	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_2101_2200	 ( CHECK ( ol_w_id >= 	2101	 AND ol_w_id < 	2200	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_2201_2300	 ( CHECK ( ol_w_id >= 	2201	 AND ol_w_id < 	2300	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_2301_2400	 ( CHECK ( ol_w_id >= 	2301	 AND ol_w_id < 	2400	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_2401_2500	 ( CHECK ( ol_w_id >= 	2401	 AND ol_w_id < 	2500	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_2501_2600	 ( CHECK ( ol_w_id >= 	2501	 AND ol_w_id < 	2600	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_2601_2700	 ( CHECK ( ol_w_id >= 	2601	 AND ol_w_id < 	2700	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_2701_2800	 ( CHECK ( ol_w_id >= 	2701	 AND ol_w_id < 	2800	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_2801_2900	 ( CHECK ( ol_w_id >= 	2801	 AND ol_w_id < 	2900	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_2901_3000	 ( CHECK ( ol_w_id >= 	2901	 AND ol_w_id < 	3000	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_3001_3100	 ( CHECK ( ol_w_id >= 	3001	 AND ol_w_id < 	3100	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_3101_3200	 ( CHECK ( ol_w_id >= 	3101	 AND ol_w_id < 	3200	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_3201_3300	 ( CHECK ( ol_w_id >= 	3201	 AND ol_w_id < 	3300	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_3301_3400	 ( CHECK ( ol_w_id >= 	3301	 AND ol_w_id < 	3400	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_3401_3500	 ( CHECK ( ol_w_id >= 	3401	 AND ol_w_id < 	3500	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_3501_3600	 ( CHECK ( ol_w_id >= 	3501	 AND ol_w_id < 	3600	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_3601_3700	 ( CHECK ( ol_w_id >= 	3601	 AND ol_w_id < 	3700	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_3701_3800	 ( CHECK ( ol_w_id >= 	3701	 AND ol_w_id < 	3800	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_3801_3900	 ( CHECK ( ol_w_id >= 	3801	 AND ol_w_id < 	3900	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_3901_4000	 ( CHECK ( ol_w_id >= 	3901	 AND ol_w_id < 	4000	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_4001_4100	 ( CHECK ( ol_w_id >= 	4001	 AND ol_w_id < 	4100	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_4101_4200	 ( CHECK ( ol_w_id >= 	4101	 AND ol_w_id < 	4200	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_4201_4300	 ( CHECK ( ol_w_id >= 	4201	 AND ol_w_id < 	4300	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_4301_4400	 ( CHECK ( ol_w_id >= 	4301	 AND ol_w_id < 	4400	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_4401_4500	 ( CHECK ( ol_w_id >= 	4401	 AND ol_w_id < 	4500	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_4501_4600	 ( CHECK ( ol_w_id >= 	4501	 AND ol_w_id < 	4600	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_4601_4700	 ( CHECK ( ol_w_id >= 	4601	 AND ol_w_id < 	4700	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_4701_4800	 ( CHECK ( ol_w_id >= 	4701	 AND ol_w_id < 	4800	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_4801_4900	 ( CHECK ( ol_w_id >= 	4801	 AND ol_w_id < 	4900	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_4901_5000	 ( CHECK ( ol_w_id >= 	4901	 AND ol_w_id < 	5000	 ) ) INHERITS (benchmarksql.order_line);
+CREATE TABLE benchmarksql.order_line_5001_5100	 ( CHECK ( ol_w_id >= 	5001	 AND ol_w_id < 	5100	 ) ) INHERITS (benchmarksql.order_line);
+
+
+--create a trigger to redirect records to child table
+DROP FUNCTION if exists order_line_func_insert_trigger();
+
+CREATE OR REPLACE FUNCTION order_line_func_insert_trigger()
+RETURNS TRIGGER AS $$
+BEGIN
+IF ( NEW.ol_w_id >= 1 AND NEW.ol_w_id <= 100 ) THEN INSERT INTO benchmarksql.order_line_1_100 VALUES (NEW.*) ; 
+ELSIF ( NEW.ol_w_id >=  101  AND NEW.ol_w_id <=  200  ) THEN INSERT INTO benchmarksql.order_line_101_200  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  201  AND NEW.ol_w_id <=  300  ) THEN INSERT INTO benchmarksql.order_line_201_300  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  301  AND NEW.ol_w_id <=  400  ) THEN INSERT INTO benchmarksql.order_line_301_400  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  401  AND NEW.ol_w_id <=  500  ) THEN INSERT INTO benchmarksql.order_line_401_500  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  501  AND NEW.ol_w_id <=  600  ) THEN INSERT INTO benchmarksql.order_line_501_600  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  601  AND NEW.ol_w_id <=  700  ) THEN INSERT INTO benchmarksql.order_line_601_700  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  701  AND NEW.ol_w_id <=  800  ) THEN INSERT INTO benchmarksql.order_line_701_800  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  801  AND NEW.ol_w_id <=  900  ) THEN INSERT INTO benchmarksql.order_line_801_900  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  901  AND NEW.ol_w_id <=  1000   ) THEN INSERT INTO benchmarksql.order_line_901_1000   VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  1001   AND NEW.ol_w_id <=  1100   ) THEN INSERT INTO benchmarksql.order_line_1001_1100  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  1101   AND NEW.ol_w_id <=  1200   ) THEN INSERT INTO benchmarksql.order_line_1101_1200  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  1201   AND NEW.ol_w_id <=  1300   ) THEN INSERT INTO benchmarksql.order_line_1201_1300  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  1301   AND NEW.ol_w_id <=  1400   ) THEN INSERT INTO benchmarksql.order_line_1301_1400  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  1401   AND NEW.ol_w_id <=  1500   ) THEN INSERT INTO benchmarksql.order_line_1401_1500  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  1501   AND NEW.ol_w_id <=  1600   ) THEN INSERT INTO benchmarksql.order_line_1501_1600  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  1601   AND NEW.ol_w_id <=  1700   ) THEN INSERT INTO benchmarksql.order_line_1601_1700  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  1701   AND NEW.ol_w_id <=  1800   ) THEN INSERT INTO benchmarksql.order_line_1701_1800  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  1801   AND NEW.ol_w_id <=  1900   ) THEN INSERT INTO benchmarksql.order_line_1801_1900  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  1901   AND NEW.ol_w_id <=  2000   ) THEN INSERT INTO benchmarksql.order_line_1901_2000  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  2001   AND NEW.ol_w_id <=  2100   ) THEN INSERT INTO benchmarksql.order_line_2001_2100  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  2101   AND NEW.ol_w_id <=  2200   ) THEN INSERT INTO benchmarksql.order_line_2101_2200  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  2201   AND NEW.ol_w_id <=  2300   ) THEN INSERT INTO benchmarksql.order_line_2201_2300  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  2301   AND NEW.ol_w_id <=  2400   ) THEN INSERT INTO benchmarksql.order_line_2301_2400  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  2401   AND NEW.ol_w_id <=  2500   ) THEN INSERT INTO benchmarksql.order_line_2401_2500  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  2501   AND NEW.ol_w_id <=  2600   ) THEN INSERT INTO benchmarksql.order_line_2501_2600  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  2601   AND NEW.ol_w_id <=  2700   ) THEN INSERT INTO benchmarksql.order_line_2601_2700  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  2701   AND NEW.ol_w_id <=  2800   ) THEN INSERT INTO benchmarksql.order_line_2701_2800  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  2801   AND NEW.ol_w_id <=  2900   ) THEN INSERT INTO benchmarksql.order_line_2801_2900  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  2901   AND NEW.ol_w_id <=  3000   ) THEN INSERT INTO benchmarksql.order_line_2901_3000  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  3001   AND NEW.ol_w_id <=  3100   ) THEN INSERT INTO benchmarksql.order_line_3001_3100  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  3101   AND NEW.ol_w_id <=  3200   ) THEN INSERT INTO benchmarksql.order_line_3101_3200  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  3201   AND NEW.ol_w_id <=  3300   ) THEN INSERT INTO benchmarksql.order_line_3201_3300  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  3301   AND NEW.ol_w_id <=  3400   ) THEN INSERT INTO benchmarksql.order_line_3301_3400  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  3401   AND NEW.ol_w_id <=  3500   ) THEN INSERT INTO benchmarksql.order_line_3401_3500  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  3501   AND NEW.ol_w_id <=  3600   ) THEN INSERT INTO benchmarksql.order_line_3501_3600  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  3601   AND NEW.ol_w_id <=  3700   ) THEN INSERT INTO benchmarksql.order_line_3601_3700  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  3701   AND NEW.ol_w_id <=  3800   ) THEN INSERT INTO benchmarksql.order_line_3701_3800  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  3801   AND NEW.ol_w_id <=  3900   ) THEN INSERT INTO benchmarksql.order_line_3801_3900  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  3901   AND NEW.ol_w_id <=  4000   ) THEN INSERT INTO benchmarksql.order_line_3901_4000  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  4001   AND NEW.ol_w_id <=  4100   ) THEN INSERT INTO benchmarksql.order_line_4001_4100  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  4101   AND NEW.ol_w_id <=  4200   ) THEN INSERT INTO benchmarksql.order_line_4101_4200  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  4201   AND NEW.ol_w_id <=  4300   ) THEN INSERT INTO benchmarksql.order_line_4201_4300  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  4301   AND NEW.ol_w_id <=  4400   ) THEN INSERT INTO benchmarksql.order_line_4301_4400  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  4401   AND NEW.ol_w_id <=  4500   ) THEN INSERT INTO benchmarksql.order_line_4401_4500  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  4501   AND NEW.ol_w_id <=  4600   ) THEN INSERT INTO benchmarksql.order_line_4501_4600  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  4601   AND NEW.ol_w_id <=  4700   ) THEN INSERT INTO benchmarksql.order_line_4601_4700  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  4701   AND NEW.ol_w_id <=  4800   ) THEN INSERT INTO benchmarksql.order_line_4701_4800  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  4801   AND NEW.ol_w_id <=  4900   ) THEN INSERT INTO benchmarksql.order_line_4801_4900  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  4901   AND NEW.ol_w_id <=  5000   ) THEN INSERT INTO benchmarksql.order_line_4901_5000  VALUES (NEW.*);  
+ELSIF ( NEW.ol_w_id >=  5001   AND NEW.ol_w_id <=  5100   ) THEN INSERT INTO benchmarksql.order_line_5001_5100  VALUES (NEW.*);  
+ELSE
+RAISE EXCEPTION 'warehouse_id out of range. Fix the order_line_func_insert_trigger() function!'; 
+END IF; 
+RETURN NULL; 
+END; 
+$$ LANGUAGE plpgsql; 
+/
+
+
+CREATE TRIGGER trigger_order_line_insert
+  BEFORE INSERT ON benchmarksql.order_line
+  FOR EACH ROW EXECUTE PROCEDURE order_line_func_insert_trigger();
+
+DROP FUNCTION if exists order_line_func_delete_trigger();
+
+CREATE OR REPLACE FUNCTION order_line_func_delete_trigger()
+RETURNS TRIGGER AS $$
+BEGIN
+IF ( OLD.ol_w_id >= 1 AND OLD.ol_w_id <= 100 ) THEN DELETE FROM benchmarksql.order_line_1_100 WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ; 
+ELSIF ( OLD.ol_w_id >=  101  AND OLD.ol_w_id <=  200  ) THEN DELETE FROM benchmarksql.order_line_101_200  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  201  AND OLD.ol_w_id <=  300  ) THEN DELETE FROM benchmarksql.order_line_201_300  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  301  AND OLD.ol_w_id <=  400  ) THEN DELETE FROM benchmarksql.order_line_301_400  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  401  AND OLD.ol_w_id <=  500  ) THEN DELETE FROM benchmarksql.order_line_401_500  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  501  AND OLD.ol_w_id <=  600  ) THEN DELETE FROM benchmarksql.order_line_501_600  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  601  AND OLD.ol_w_id <=  700  ) THEN DELETE FROM benchmarksql.order_line_601_700  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  701  AND OLD.ol_w_id <=  800  ) THEN DELETE FROM benchmarksql.order_line_701_800  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  801  AND OLD.ol_w_id <=  900  ) THEN DELETE FROM benchmarksql.order_line_801_900  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  901  AND OLD.ol_w_id <=  1000   ) THEN DELETE FROM benchmarksql.order_line_901_1000   WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  1001   AND OLD.ol_w_id <=  1100   ) THEN DELETE FROM benchmarksql.order_line_1001_1100  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  1101   AND OLD.ol_w_id <=  1200   ) THEN DELETE FROM benchmarksql.order_line_1101_1200  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  1201   AND OLD.ol_w_id <=  1300   ) THEN DELETE FROM benchmarksql.order_line_1201_1300  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  1301   AND OLD.ol_w_id <=  1400   ) THEN DELETE FROM benchmarksql.order_line_1301_1400  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  1401   AND OLD.ol_w_id <=  1500   ) THEN DELETE FROM benchmarksql.order_line_1401_1500  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  1501   AND OLD.ol_w_id <=  1600   ) THEN DELETE FROM benchmarksql.order_line_1501_1600  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  1601   AND OLD.ol_w_id <=  1700   ) THEN DELETE FROM benchmarksql.order_line_1601_1700  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  1701   AND OLD.ol_w_id <=  1800   ) THEN DELETE FROM benchmarksql.order_line_1701_1800  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  1801   AND OLD.ol_w_id <=  1900   ) THEN DELETE FROM benchmarksql.order_line_1801_1900  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  1901   AND OLD.ol_w_id <=  2000   ) THEN DELETE FROM benchmarksql.order_line_1901_2000  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  2001   AND OLD.ol_w_id <=  2100   ) THEN DELETE FROM benchmarksql.order_line_2001_2100  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  2101   AND OLD.ol_w_id <=  2200   ) THEN DELETE FROM benchmarksql.order_line_2101_2200  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  2201   AND OLD.ol_w_id <=  2300   ) THEN DELETE FROM benchmarksql.order_line_2201_2300  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  2301   AND OLD.ol_w_id <=  2400   ) THEN DELETE FROM benchmarksql.order_line_2301_2400  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  2401   AND OLD.ol_w_id <=  2500   ) THEN DELETE FROM benchmarksql.order_line_2401_2500  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  2501   AND OLD.ol_w_id <=  2600   ) THEN DELETE FROM benchmarksql.order_line_2501_2600  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  2601   AND OLD.ol_w_id <=  2700   ) THEN DELETE FROM benchmarksql.order_line_2601_2700  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  2701   AND OLD.ol_w_id <=  2800   ) THEN DELETE FROM benchmarksql.order_line_2701_2800  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  2801   AND OLD.ol_w_id <=  2900   ) THEN DELETE FROM benchmarksql.order_line_2801_2900  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  2901   AND OLD.ol_w_id <=  3000   ) THEN DELETE FROM benchmarksql.order_line_2901_3000  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  3001   AND OLD.ol_w_id <=  3100   ) THEN DELETE FROM benchmarksql.order_line_3001_3100  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  3101   AND OLD.ol_w_id <=  3200   ) THEN DELETE FROM benchmarksql.order_line_3101_3200  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  3201   AND OLD.ol_w_id <=  3300   ) THEN DELETE FROM benchmarksql.order_line_3201_3300  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  3301   AND OLD.ol_w_id <=  3400   ) THEN DELETE FROM benchmarksql.order_line_3301_3400  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  3401   AND OLD.ol_w_id <=  3500   ) THEN DELETE FROM benchmarksql.order_line_3401_3500  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  3501   AND OLD.ol_w_id <=  3600   ) THEN DELETE FROM benchmarksql.order_line_3501_3600  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  3601   AND OLD.ol_w_id <=  3700   ) THEN DELETE FROM benchmarksql.order_line_3601_3700  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  3701   AND OLD.ol_w_id <=  3800   ) THEN DELETE FROM benchmarksql.order_line_3701_3800  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  3801   AND OLD.ol_w_id <=  3900   ) THEN DELETE FROM benchmarksql.order_line_3801_3900  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  3901   AND OLD.ol_w_id <=  4000   ) THEN DELETE FROM benchmarksql.order_line_3901_4000  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  4001   AND OLD.ol_w_id <=  4100   ) THEN DELETE FROM benchmarksql.order_line_4001_4100  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  4101   AND OLD.ol_w_id <=  4200   ) THEN DELETE FROM benchmarksql.order_line_4101_4200  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  4201   AND OLD.ol_w_id <=  4300   ) THEN DELETE FROM benchmarksql.order_line_4201_4300  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  4301   AND OLD.ol_w_id <=  4400   ) THEN DELETE FROM benchmarksql.order_line_4301_4400  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  4401   AND OLD.ol_w_id <=  4500   ) THEN DELETE FROM benchmarksql.order_line_4401_4500  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  4501   AND OLD.ol_w_id <=  4600   ) THEN DELETE FROM benchmarksql.order_line_4501_4600  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  4601   AND OLD.ol_w_id <=  4700   ) THEN DELETE FROM benchmarksql.order_line_4601_4700  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  4701   AND OLD.ol_w_id <=  4800   ) THEN DELETE FROM benchmarksql.order_line_4701_4800  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  4801   AND OLD.ol_w_id <=  4900   ) THEN DELETE FROM benchmarksql.order_line_4801_4900  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  4901   AND OLD.ol_w_id <=  5000   ) THEN DELETE FROM benchmarksql.order_line_4901_5000  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSIF ( OLD.ol_w_id >=  5001   AND OLD.ol_w_id <=  5100   ) THEN DELETE FROM benchmarksql.order_line_5001_5100  WHERE ol_w_id=OLD.ol_w_id and ol_d_id=OLD.ol_d_id and ol_o_id=OLD.ol_o_id and ol_number=OLD.ol_number ;  
+ELSE
+RAISE EXCEPTION 'warehouse_id out of range. Fix the order_line_func_delete_trigger() function!'; 
+END IF; 
+RETURN NULL; 
+END; 
+$$ LANGUAGE plpgsql; 
+/
+
+
+CREATE TRIGGER trigger_order_line_delete
+  BEFORE DELETE ON benchmarksql.order_line
+  FOR EACH ROW EXECUTE PROCEDURE order_line_func_delete_trigger();
+

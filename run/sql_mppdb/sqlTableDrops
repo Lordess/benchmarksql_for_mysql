@@ -1,0 +1,18 @@
+drop sequence if exists hist_id_seq;
+drop table IF EXISTS benchmarksql.warehouse;
+
+drop table IF EXISTS benchmarksql.item;
+
+drop table IF EXISTS benchmarksql.stock;
+
+drop table IF EXISTS benchmarksql.district;
+
+drop table IF EXISTS benchmarksql.customer;
+
+drop table IF EXISTS benchmarksql.oorder;
+
+drop table IF EXISTS benchmarksql.order_line;
+
+drop table IF EXISTS benchmarksql.history;
+
+drop table IF EXISTS benchmarksql.new_order;
