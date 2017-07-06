@@ -27,8 +27,8 @@
 [MyCat](https://github.com/MyCATApache/Mycat-Server)
   A Java-based mysql protocol router.
 
-## Contributors
+## Contributors ( alphabetic order )
 
-  Hailong Li
-  Weihua Peng
-  Yue Zhong(John)
+* Hailong Li
+* Weihua Peng
+* Yue Zhong(John)
