@@ -1367,11 +1367,12 @@ public class jTPCCTerminal implements jTPCCConfig, Runnable {
 
 	private void stockLevelTransaction(int w_id, int d_id, int threshold) {
 		PreparedStatement stockGetDistOrderId = null;
-		PreparedStatement stockGetCountStock = null;
+		PreparedStatement stockGetCountStock1 = null;
+		PreparedStatement stockGetCountStock2 = null;
 		ResultSet rs = null;
 		int o_id = 0;
-		// int i_id = 0;
 		int stock_count = 0;
+		String in_list = "";
 
 		// District dist = new District();
 		// OrderLine orln = new OrderLine();
@@ -1406,37 +1407,75 @@ public class jTPCCTerminal implements jTPCCConfig, Runnable {
 
 			printMessage("Next Order ID for District = " + o_id);
 
-			if (stockGetCountStock == null) {
-				stockGetCountStock = conn
-						.prepareStatement("SELECT COUNT(DISTINCT (s_i_id)) AS stock_count"
-								+ " FROM order_line, stock"
+			/*
+			 * Use 2 simple SELCT to replace the one belows:
+			 *
+			 *		.prepareStatement("SELECT COUNT(DISTINCT (s_i_id)) AS stock_count"
+			 *				+ " FROM order_line, stock"
+			 *				+ " WHERE ol_w_id = ?"
+			 *				+ " AND ol_d_id = ?"
+			 *				+ " AND ol_o_id < ?"
+			 *				+ " AND ol_o_id >= ? - 20"
+			 *				+ " AND s_w_id = ?"
+			 *				+ " AND s_i_id = ol_i_id"								+ " AND s_quantity < ?");
+			*/
+			
+			//第一段查询代码  by pengwh
+			if (stockGetCountStock1 == null) {
+				stockGetCountStock1 = conn
+						.prepareStatement("SELECT ol_i_id"
+								+ " FROM order_line"
 								+ " WHERE ol_w_id = ?"
 								+ " AND ol_d_id = ?"
 								+ " AND ol_o_id < ?"
-								+ " AND ol_o_id >= ? - 20"
-								+ " AND s_w_id = ?"
-								+ " AND s_i_id = ol_i_id"
-								+ " AND s_quantity < ?");
+								+ " AND ol_o_id >= ? - 20");		
+			
 			}
-
-			stockGetCountStock.setInt(1, w_id);
-			stockGetCountStock.setInt(2, d_id);
-			stockGetCountStock.setInt(3, o_id);
-			stockGetCountStock.setInt(4, o_id);
-			stockGetCountStock.setInt(5, w_id);
-			stockGetCountStock.setInt(6, threshold);
-
-			rs = stockGetCountStock.executeQuery();
+			stockGetCountStock1.setInt(1, w_id);
+			stockGetCountStock1.setInt(2, d_id);
+			stockGetCountStock1.setInt(3, o_id);
+			stockGetCountStock1.setInt(4, o_id);
+			
+			rs = stockGetCountStock1.executeQuery();
 			if (!rs.next()) {
-				log.error("stockGetCountStock() not found! W_ID=" + w_id
-						+ " D_ID=" + d_id + " O_ID=" + o_id);
+				log.error("stockGetCountStock1() not found! ol_w_id=" + w_id
+						+ " ol_d_id=" + d_id + " ol_o_id=" + o_id);
 			}
-
+			else{
+				in_list = rs.getString(1);
+				while ( rs.next() ) 
+					in_list += ", " + rs.getString(1);
+			}
+			
+			rs.close();
+			rs = null;
+			stockGetCountStock1.close();
+			stockGetCountStock1 = null;
+           
+			//第二段查询代码 by pengwh
+			if (stockGetCountStock2 == null) {
+				stockGetCountStock2 = conn
+						.prepareStatement("SELECT COUNT(DISTINCT (s_i_id)) AS stock_count"
+								+ " FROM stock"
+								+ " WHERE s_w_id = ?"
+								+ " AND s_quantity < ?"
+								+ " AND s_i_id IN (" + in_list + ")");		
+			
+			}
+			stockGetCountStock2.setInt(1, w_id);
+			stockGetCountStock2.setInt(2, threshold);
+			
+			rs = stockGetCountStock2.executeQuery();
+			if (!rs.next()) {
+				log.error("stockGetCountStock1() not found! ol_w_id=" + w_id
+						+ " ol_d_id=" + d_id + " ol_o_id=" + o_id);
+			}
 			stock_count = rs.getInt("stock_count");
 			rs.close();
 			rs = null;
-			stockGetCountStock.close();
-			stockGetCountStock = null;
+			stockGetCountStock2.close();
+			stockGetCountStock2 = null;
+			in_list = null;
 
 			// StringBuffer terminalMessage = new StringBuffer();
 			if(jTPCC.verbose){
