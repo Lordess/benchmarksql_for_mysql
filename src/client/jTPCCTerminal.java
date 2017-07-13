@@ -1001,10 +1001,10 @@ public class jTPCCTerminal implements jTPCCConfig, Runnable {
 
 			if (stmtGetCustWhse == null) {
 				stmtGetCustWhse = conn
-						.prepareStatement("SELECT c_discount, c_last, c_credit, w_tax"
-								+ "  FROM customer, warehouse"
-								+ " WHERE w_id = ? AND w_id = c_w_id"
-								+ " AND c_d_id = ? AND c_id = ?");
+						.prepareStatement("SELECT c.c_discount, c.c_last, c.c_credit, w.w_tax"
+								+ "  FROM customer AS c, warehouse AS w"
+								+ " WHERE w.w_id = ? AND w.w_id = c.c_w_id"
+								+ " AND c.c_d_id = ? AND c.c_id = ?");
 			}
 
 			stmtGetCustWhse.setInt(1, w_id);
