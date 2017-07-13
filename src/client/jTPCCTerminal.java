@@ -1345,7 +1345,8 @@ public class jTPCCTerminal implements jTPCCConfig, Runnable {
 			log
 					.error("--- Unexpected SQLException caught in NEW-ORDER Txn ---");
 			while (ex != null) {
-				log.error(ex.getMessage());
+				log.error(ex.toString());
+				ex.printStackTrace();
 				ex = ex.getNextException();
 			}
 
