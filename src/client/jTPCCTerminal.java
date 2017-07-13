@@ -963,7 +963,8 @@ public class jTPCCTerminal implements jTPCCConfig, Runnable {
 	private void newOrderTransaction(int w_id, int d_id, int c_id,
 			int o_ol_cnt, int o_all_local, int[] itemIDs,
 			int[] supplierWarehouseIDs, int[] orderQuantities) {
-		PreparedStatement stmtGetCustWhse = null;
+		PreparedStatement stmtGetCustWhse1 = null;
+		PreparedStatement stmtGetCustWhse2 = null;
 		PreparedStatement stmtGetDist = null;
 		PreparedStatement stmtInsertNewOrder = null;
 		PreparedStatement stmtUpdateDist = null;
@@ -987,46 +988,60 @@ public class jTPCCTerminal implements jTPCCConfig, Runnable {
 		int s_remote_cnt_increment = 0;
 		float ol_amount = 0, total_amount = 0;
 		boolean newOrderRowInserted;
+		int  w_w_id = 0;
 
-		// Warehouse whse = new Warehouse();
-		// Customer cust = new Customer();
-		// District dist = new District();
-		// NewOrder nwor = new NewOrder();
-		// Oorder ordr = new Oorder();
-		// OrderLine orln = new OrderLine();
-		// Stock stck = new Stock();
-		// Item item = new Item();
-
+		/*
+		 * Use 2 simple SELCT to replace the one belows:
+		 *	.prepareStatement("SELECT c.c_discount, c.c_last, c.c_credit, w.w_tax"
+		 *			+ "  FROM customer AS c, warehouse AS w"
+		 *			+ " WHERE w.w_id = ? AND w.w_id = c.c_w_id"
+		 *			+ " AND c.c_d_id = ? AND c.c_id = ?");
+		 */
+		//第一阶段执行 by pengwh,zhongyue ya ke xi
 		try {
-
-			if (stmtGetCustWhse == null) {
-				stmtGetCustWhse = conn
-						.prepareStatement("SELECT c.c_discount, c.c_last, c.c_credit, w.w_tax"
-								+ "  FROM customer AS c, warehouse AS w"
-								+ " WHERE w.w_id = ? AND w.w_id = c.c_w_id"
-								+ " AND c.c_d_id = ? AND c.c_id = ?");
+			if (stmtGetCustWhse1 == null) {
+				stmtGetCustWhse1 = conn
+						.prepareStatement("SELECT w_id, w_tax"
+								+ " FROM warehouse"
+								+ " WHERE w_id = ? ");
 			}
-
-			stmtGetCustWhse.setInt(1, w_id);
-			stmtGetCustWhse.setInt(2, d_id);
-			stmtGetCustWhse.setInt(3, c_id);
-
-			rs = stmtGetCustWhse.executeQuery();
+			stmtGetCustWhse1.setInt(1, w_id);
+			rs = stmtGetCustWhse1.executeQuery();
 			if (!rs.next()) {
-				log.error("stmtGetCustWhse() not found! " + "W_ID=" + w_id
-						+ " C_D_ID=" + d_id + " C_ID=" + c_id);
+				log.error("stmtGetCustWhse1() not found! " + "W_ID=" + w_id);
 			} else {
-
-				c_discount = rs.getFloat("c_discount");
-				c_last = rs.getString("c_last");
-				c_credit = rs.getString("c_credit");
-				w_tax = rs.getFloat("w_tax");
+				           w_w_id = rs.getInt("w_id");
+						   w_tax = rs.getFloat("w_tax");
 			}
 			rs.close();
 			rs = null;
-			stmtGetCustWhse.close();
-			stmtGetCustWhse = null;
-
+			stmtGetCustWhse1.close();
+			stmtGetCustWhse1 = null;
+			
+			//第二阶段执行 by pengwh,zhongyue ya ke xi
+			if (stmtGetCustWhse2 == null) {
+				stmtGetCustWhse2 = conn
+						.prepareStatement("SELECT c_discount, c_last, c_credit"
+								+ " FROM customer"
+								+ " WHERE c_w_id = "+ w_w_id +" AND"
+                                + " c_d_id = ? AND c_id = ?");
+			}
+			stmtGetCustWhse2.setInt(1, d_id);
+			stmtGetCustWhse2.setInt(2, c_id);
+			rs = stmtGetCustWhse2.executeQuery();
+			if (!rs.next()) {
+				log.error("stmtGetCustWhse2() not found! " + "C_D_ID=" + d_id + " C_ID=" + c_id);
+			} else {
+				         c_discount = rs.getFloat("c_discount");
+				         c_last = rs.getString("c_last");
+				         c_credit = rs.getString("c_credit");
+			}
+			rs.close();
+			rs = null;
+			stmtGetCustWhse2.close();
+			stmtGetCustWhse2 = null;
+			
+			//JOIN分解代码结束
 			newOrderRowInserted = false;
 			while (!newOrderRowInserted && !stopRunningSignal) {
 				if (stmtGetDist == null) {
