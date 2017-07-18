@@ -1293,7 +1293,7 @@ public class jTPCCTerminal implements jTPCCConfig, Runnable {
 			} // end-for
 
 			stmtInsertOrderLine.executeBatch();
-			stmtUpdateStock.executeBatch();
+			stmtUpdateStock.executeUpdate();
 			transCommit();
 			stmtInsertOrderLine.clearBatch();
 			stmtInsertOrderLine.close();
